@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Scan components -->
+    <context:component-scan base-package="cg.demo.association.spring12.beans"/>
+
+    <!-- Employee Bean -->
+    <bean id="emp1" class="cg.demo.association.spring12.beans.Employee" autowire="byName">
+
+        <property name="employeeId" value="101"/>
+        <property name="employeeName" value="shray"/>
+        <property name="salary" value="56000"/>
+        <property name="buisnessUnit" value="fu"/>
+        <property name="age" value="23"/>
+
+    </bean>
+    <bean id="sbu" class="cg.demo.association.spring12.beans.Sbu">
+    <property name="sbuId" value="1"/>
+    <property name="sbuName" value="s"></property>
+    <property name="sbuHead" value="d" ></property>
+    <property name="empList">
+        <list>
+            <ref bean="emp1"/>
+        </list></property>
+    </bean>
+
+</beans>
