@@ -2,10 +2,13 @@ package com.example.demo.entity;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
+
+
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
+@Entity
 
 public class Department {
 	 @Id

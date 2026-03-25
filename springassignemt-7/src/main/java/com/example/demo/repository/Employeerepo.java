@@ -18,6 +18,7 @@ public interface Employeerepo extends JpaRepository<Employee, Long> {
 	Employee findByMobile(String mobile);
 
 
-	public List<Object[]> countEmployeesByDept();
+	@Query("SELECT e.department.name, COUNT(e) FROM Employee e GROUP BY e.department.name")
+	List<Object[]> countEmployeesByDept();
 
 }

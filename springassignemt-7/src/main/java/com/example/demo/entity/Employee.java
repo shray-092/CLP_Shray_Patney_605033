@@ -1,8 +1,7 @@
 package com.example.demo.entity;
-
+import jakarta.persistence.Id;
 import java.util.Set;
 
-import org.springframework.data.annotation.Id;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
