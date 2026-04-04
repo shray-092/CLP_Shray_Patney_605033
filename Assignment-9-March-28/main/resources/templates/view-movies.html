@@ -1,0 +1,17 @@
+<table border="1">
+<tr>
+    <th>ID</th><th>Name</th><th>Genre</th><th>Rating</th><th>Actions</th>
+</tr>
+
+<tr th:each="m : ${movies}">
+    <td th:text="${m.movieId}"></td>
+    <td th:text="${m.movieName}"></td>
+    <td th:text="${m.genre}"></td>
+    <td th:text="${m.rating}"></td>
+
+    <td>
+        <a th:href="@{/movies/delete/{id}(id=${m.movieId})}">Delete</a>
+        <a th:href="@{/movies/edit/{id}(id=${m.movieId})}">Edit</a>
+    </td>
+</tr>
+</table>
