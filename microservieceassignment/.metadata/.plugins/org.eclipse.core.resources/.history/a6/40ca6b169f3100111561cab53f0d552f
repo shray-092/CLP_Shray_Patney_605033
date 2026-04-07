@@ -1,0 +1,42 @@
+package com.example.demo.price;
+
+import jakarta.persistence.Entity;
+
+@Entity
+
+public class Price {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int productId;
+	private double price;
+	private String currency;
+	public Price() {
+		
+	}
+	public Price(int productId, double price, String currency) {
+		this.productId = productId;
+		this.price = price;
+		this.currency = currency;
+	}
+	public int getProductId() {
+		return productId;
+	}
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	
+
+}

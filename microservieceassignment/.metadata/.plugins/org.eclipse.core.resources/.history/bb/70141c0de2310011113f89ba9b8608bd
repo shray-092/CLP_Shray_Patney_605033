@@ -1,0 +1,14 @@
+spring.application.name=StockService
+
+server.port=8083
+
+# PostgreSQL - employeeDb
+spring.datasource.url=jdbc:postgresql://localhost:5432/employeeDb
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.show-sql=true

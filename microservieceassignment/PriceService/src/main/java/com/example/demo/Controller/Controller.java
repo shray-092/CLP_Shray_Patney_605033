@@ -1,0 +1,34 @@
+package com.example.demo.Controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.Repository.IPriceRepository;
+import com.example.demo.price.Price;
+
+@RestController
+
+public class Controller {
+	@Autowired
+	IPriceRepository repo;
+	@GetMapping("/price")
+	public List<Price> getPrice() {
+		return repo.findAll();
+	}
+	@GetMapping("/price/{id}")
+	public Price getPriceById(@PathVariable int id) {
+		return repo.findById(id).orElse(null);
+	}
+	@PostMapping("/price")
+	public Price addPrice(@RequestBody Price price) {
+		return repo.save(price);
+	}
+	
+
+}
