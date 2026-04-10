@@ -1,9 +1,7 @@
 package com.example.demo.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.CartProduct.CartProduct;
@@ -12,6 +10,8 @@ import com.example.demo.CartProduct.Product;
 import com.example.demo.CartProduct.Recommendation;
 import com.example.demo.CartProduct.Stock;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @RestController
 public class CartController {
 
@@ -19,28 +19,21 @@ public class CartController {
     RestTemplate restTemplate;
 
     @GetMapping("/cart/{id}")
+    @CircuitBreaker(name = "cartCircuitBreaker", fallbackMethod = "fallbackCart")
     public CartProduct getCartProduct(@PathVariable int id) {
 
-      
         Product product = restTemplate.getForObject(
-            "http://CATALOGUESERVICE/products/" + id,
-            Product.class
-        );
+            "http://CATALOGUESERVICE/products/" + id, Product.class);
 
         Price price = restTemplate.getForObject(
-            "http://PRICESERVICE/price/" + id,
-            Price.class
-        );
+            "http://PRICESERVICE/price/" + id, Price.class);
 
         Stock stock = restTemplate.getForObject(
-            "http://STOCKSERVICE/stock/" + id,
-            Stock.class
-        );
+            "http://STOCKSERVICE/stock/" + id, Stock.class);
 
         Recommendation rec = restTemplate.getForObject(
-            "http://RECOMMENDATIONSERVICE/recommendations/" + id,
-            Recommendation.class
-        );
+            "http://RECOMMENDATIONSERVICE/recommendations/" + id, 
+            Recommendation.class);
 
         CartProduct cp = new CartProduct();
         cp.setId(id);
@@ -52,7 +45,16 @@ public class CartController {
         cp.setQuantity(stock.getQuantity());
         cp.setInStock(stock.isInStock());
         cp.setRecommendedProducts(rec.getRecommendedProducts());
+        cp.setMessage("Success");
+        return cp;
+    }
 
+  
+    public CartProduct fallbackCart(int id, Exception ex) {
+        CartProduct cp = new CartProduct();
+        cp.setId(id);
+        cp.setName("Service temporarily unavailable");
+        cp.setMessage("One or more services are down. Please try again later.");
         return cp;
     }
 }

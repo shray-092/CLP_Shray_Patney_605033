@@ -1,0 +1,64 @@
+package com.example.demo.Controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import com.example.demo.CartProduct;
+import com.example.demo.Price;
+import com.example.demo.Product;
+import com.example.demo.Recommendation;
+import com.example.demo.Stock;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
+@RestController
+public class CartController {
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @GetMapping("/cart/{id}")
+    @CircuitBreaker(name = "cartCircuitBreaker", fallbackMethod = "fallbackCart")
+    public CartProduct getCartProduct(@PathVariable int id) {
+
+        Product product = restTemplate.getForObject(
+            "http://CATALOGUESERVICE/products/" + id, Product.class);
+
+        Price price = restTemplate.getForObject(
+            "http://PRICESERVICE/price/" + id, Price.class);
+
+        Stock stock = restTemplate.getForObject(
+            "http://STOCKSERVICE/stock/" + id, Stock.class);
+
+        Recommendation rec = restTemplate.getForObject(
+            "http://RECOMMENDATIONSERVICE/recommendations/" + id, 
+            Recommendation.class);
+
+        CartProduct cp = new CartProduct();
+        cp.setId(id);
+        cp.setName(product.getName());
+        cp.setCategory(product.getCategory());
+        cp.setDescription(product.getDescription());
+        cp.setAmount(price.getAmount());
+        cp.setCurrency(price.getCurrency());
+        cp.setQuantity(stock.getQuantity());
+        cp.setInStock(stock.isInStock());
+        cp.setRecommendedProducts(rec.getRecommendedProducts());
+        cp.setMessage("Success");
+        return cp;
+    }
+
+    // ⚠️ RULES:
+    // 1. Same return type → CartProduct
+    // 2. Same parameters → int id
+    // 3. Exception/Throwable at end → Exception ex
+    // 4. Same class mein hona chahiye
+    public CartProduct fallbackCart(int id, Exception ex) {
+        CartProduct cp = new CartProduct();
+        cp.setId(id);
+        cp.setName("Service temporarily unavailable");
+        cp.setMessage("One or more services are down. Please try again later.");
+        return cp;
+    }
+}

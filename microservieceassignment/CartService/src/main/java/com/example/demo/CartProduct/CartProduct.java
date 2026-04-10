@@ -6,22 +6,15 @@ import java.util.List;
 public class CartProduct {
 
     private int id;
-
-    // From CatalogueService
     private String name;
     private String category;
     private String description;
-
-    // From PriceService
     private double amount;
     private String currency;
-
-    // From StockService
     private int quantity;
     private boolean inStock;
-
-    // From RecommendationService
     private List<String> recommendedProducts;
+    private String message;  // ← ADDED
 
     public CartProduct() {
     }
@@ -51,7 +44,8 @@ public class CartProduct {
     public void setInStock(boolean inStock) { this.inStock = inStock; }
 
     public List<String> getRecommendedProducts() { return recommendedProducts; }
-    public void setRecommendedProducts(List<String> recommendedProducts) {
-        this.recommendedProducts = recommendedProducts;
-    }
+    public void setRecommendedProducts(List<String> r) { this.recommendedProducts = r; }
+
+    public String getMessage() { return message; }   // ← ADDED
+    public void setMessage(String message) { this.message = message; }  // ← ADDED
 }
